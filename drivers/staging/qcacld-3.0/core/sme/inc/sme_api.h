@@ -54,6 +54,7 @@
 #define SME_GLOBAL_CLASSD_STATS   (1 << eCsrGlobalClassDStats)
 #define SME_PER_CHAIN_RSSI_STATS  (1 << csr_per_chain_rssi_stats)
 
+#ifdef WLAN_DEBUG
 #define sme_alert(params...) QDF_TRACE_FATAL(QDF_MODULE_ID_SME, params)
 #define sme_err(params...) QDF_TRACE_ERROR(QDF_MODULE_ID_SME, params)
 #define sme_warn(params...) QDF_TRACE_WARN(QDF_MODULE_ID_SME, params)
@@ -80,6 +81,32 @@
 #define SME_ENTER() sme_debug("enter")
 #define SME_EXIT() sme_debug("exit")
 
+#else /* WLAN_DEBUG */
+/* Needed to avoid problems caused by disabling debug
+ * but different stuff still being passed to these loggers */
+#define noop ({ do { } while (0); })
+
+#define sme_alert(params...) noop
+#define sme_err(params...) noop
+#define sme_warn(params...) noop
+#define sme_info(params...) noop
+#define sme_debug(params...) noop
+
+#define sme_nofl_alert(params...) noop
+#define sme_nofl_err(params...) noop
+#define sme_nofl_warn(params...) noop
+#define sme_nofl_info(params...) noop
+#define sme_nofl_debug(params...) noop
+
+#define sme_alert_rl(params...) noop
+#define sme_err_rl(params...) noop
+#define sme_warn_rl(params...) noop
+#define sme_info_rl(params...) noop
+#define sme_debug_rl(params...) noop
+
+#define SME_ENTER() noop
+#define SME_EXIT() noop
+#endif /* WLAN_DEBUG */
 #define SME_SESSION_ID_ANY        50
 #define SME_SESSION_ID_BROADCAST  0xFF
 
