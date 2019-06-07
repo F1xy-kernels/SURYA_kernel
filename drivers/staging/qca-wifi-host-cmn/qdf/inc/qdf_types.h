@@ -636,6 +636,7 @@ void qdf_vtrace_msg(QDF_MODULE_ID module, QDF_TRACE_LEVEL level,
 
 #endif /* CONFIG_MCL */
 
+#ifdef WLAN_DEBUG
 #define qdf_nofl_alert(params...) \
 	QDF_TRACE_FATAL_NO_FL(QDF_MODULE_ID_QDF, ## params)
 #define qdf_nofl_err(params...) \
@@ -652,6 +653,22 @@ void qdf_vtrace_msg(QDF_MODULE_ID module, QDF_TRACE_LEVEL level,
 #define qdf_rl_warn(params...) QDF_TRACE_WARN_RL(QDF_MODULE_ID_QDF, ## params)
 #define qdf_rl_info(params...) QDF_TRACE_INFO_RL(QDF_MODULE_ID_QDF, ## params)
 #define qdf_rl_debug(params...) QDF_TRACE_DEBUG_RL(QDF_MODULE_ID_QDF, ## params)
+#else /* WLAN_DEBUG */
+/* Needed to avoid problems caused by disabling debug
+ * but different stuff still being passed to these loggers */
+#define noop ({ do { } while (0); })
+
+#define qdf_nofl_alert(params...) noop
+#define qdf_nofl_err(params...) noop
+#define qdf_nofl_warn(params...) noop
+#define qdf_nofl_info(params...) noop
+#define qdf_nofl_debug(params...) noop
+#define qdf_rl_alert(params...) noop
+#define qdf_rl_err(params...) noop
+#define qdf_rl_warn(params...) noop
+#define qdf_rl_info(params...) noop
+#define qdf_rl_debug(params...) noop
+#endif /* WLAN_DEBUG */
 
 #define qdf_rl_nofl_alert(params...) \
 	QDF_TRACE_FATAL_RL_NO_FL(QDF_MODULE_ID_QDF, ## params)
