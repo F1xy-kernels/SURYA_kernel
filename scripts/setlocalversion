@@ -55,6 +55,14 @@ scm_version()
 			return
 		fi
 
+		# Get branch name, get commit sha, leave.
+		if test "$CONFIG_LOCALVERSION_BRANCH_SHA" = "y"; then
+			branch_name=$(git rev-parse --abbrev-ref HEAD)
+			last_commit=$(git rev-parse --verify --short=10 HEAD)
+			printf '%s' "-$branch_name/$last_commit"
+			return
+		fi
+
 		# If we are at a tagged commit (like "v2.6.30-rc6"), we ignore
 		# it, because this version is defined in the top level Makefile.
 		if [ -z "`git describe --exact-match 2>/dev/null`" ]; then
