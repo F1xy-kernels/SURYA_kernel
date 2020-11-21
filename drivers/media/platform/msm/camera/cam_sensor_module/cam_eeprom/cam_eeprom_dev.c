@@ -44,7 +44,7 @@ static int cam_eeprom_subdev_close(struct v4l2_subdev *sd,
 		CAM_ERR(CAM_EEPROM, "e_ctrl ptr is NULL");
 			return -EINVAL;
 	}
-
+    CAM_DBG(CAM_EEPROM, "xyz eeprom %s %d", __func__, __LINE__);
 	mutex_lock(&(e_ctrl->eeprom_mutex));
 	cam_eeprom_shutdown(e_ctrl);
 	mutex_unlock(&(e_ctrl->eeprom_mutex));

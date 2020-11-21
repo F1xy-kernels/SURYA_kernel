@@ -165,6 +165,7 @@
 	/delete-node/ mdm-dsp-lowf;
 	/delete-node/ npu-lowf;
 	/delete-node/ video-lowf;
+	/delete-node/ backlight_therm;
 };
 
 &usb0 {
