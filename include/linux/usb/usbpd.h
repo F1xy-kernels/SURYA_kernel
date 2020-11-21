@@ -165,4 +165,5 @@ static inline int usbpd_exit_mode(struct usbpd *pd, u16 svid, int mode,
 			SVDM_CMD_TYPE_INITIATOR, mode, vdo, vdo ? 1 : 0);
 }
 
+
 #endif /* __LINUX_USB_USBPD_H */

@@ -61,7 +61,7 @@
 		"RX_TX DEC3_INP", "TX DEC3 MUX",
 		"SpkrLeft IN", "WSA_SPK1 OUT",
 		"WSA_SPK1 OUT", "VA_MCLK";
-	qcom,wsa-max-devs = <1>;
-	qcom,wsa-devs = <&wsa881x_0211>, <&wsa881x_0213>;
+	qcom,wsa-max-devs = <0>;
+	/*qcom,wsa-devs = <&wsa881x_0211>, <&wsa881x_0213>;*/
 	qcom,wsa-aux-dev-prefix = "SpkrLeft", "SpkrLeft";
 };
