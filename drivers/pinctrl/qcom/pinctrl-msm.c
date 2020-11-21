@@ -1986,8 +1986,6 @@ static void msm_pinctrl_resume(void)
 				name = desc->action->name;
 
 			pr_warn("%s: %d triggered %s\n", __func__, irq, name);
-//2019.04.27 add longcheer fengxingqiang "recording wakeup reason"
-			log_wakeup_reason(irq);
 		}
 	}
 	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
