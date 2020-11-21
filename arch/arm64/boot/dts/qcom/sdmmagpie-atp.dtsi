@@ -245,7 +245,7 @@
 &sde_dp {
 	qcom,dp-aux-switch = <&fsa4480>;
 };
-
+/*
 &qupv3_se7_i2c {
 	status = "ok";
 	st_fts@49 {
@@ -268,7 +268,7 @@
 		st,y-flip;
 	};
 };
-
+*/
 &pm6150_qg {
 	qcom,battery-data = <&mtp_batterydata>;
 	qcom,qg-iterm-ma = <100>;

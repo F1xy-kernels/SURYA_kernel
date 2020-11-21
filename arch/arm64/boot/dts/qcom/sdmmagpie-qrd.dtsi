@@ -39,11 +39,11 @@
 
 	mtp_batterydata: qcom,battery-data {
 		qcom,batt-id-range-pct = <15>;
-		#include "qg-batterydata-alium-3600mah.dtsi"
-		#include "qg-batterydata-mlp466076-3200mah.dtsi"
+		#include "batterydata-M703-PM7150B-ATL-5160mah.dtsi"
+		#include "batterydata-M703-ATL-6000mah.dtsi"
 	};
 };
-
+/*
 &qupv3_se7_i2c{
 	qcom,i2c-touch-active="st,fts";
 	status = "ok";
@@ -63,7 +63,7 @@
 		st,regulator_avdd = "avdd";
 	};
 };
-
+*/
 &tlmm {
 	pmx_ts_active {
 		ts_active: ts_active {
