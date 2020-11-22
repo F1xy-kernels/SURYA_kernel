@@ -5999,7 +5999,7 @@ QDF_STATUS sme_get_cfg_valid_channels(uint8_t *aValidChannels,
 	return status;
 }
 
-static uint8_t *sme_reg_hint_to_str(const enum country_src src)
+static __maybe_unused uint8_t *sme_reg_hint_to_str(const enum country_src src)
 {
 	switch (src) {
 	case SOURCE_CORE:
