@@ -29,6 +29,7 @@ struct wmi_hang_data_fixed_param {
 #define WMI_EVT_HIST 0
 #define WMI_CMD_HIST 1
 
+#ifdef WLAN_DEBUG
 static void wmi_log_history(struct notifier_block *block, void *data,
 			    uint8_t wmi_history)
 {
@@ -109,13 +110,16 @@ static void wmi_log_history(struct notifier_block *block, void *data,
 		wmi_hang_data->offset += total_len;
 	}
 }
+#endif
 
 static int wmi_recovery_notifier_call(struct notifier_block *block,
 				      unsigned long state,
 				      void *data)
 {
+#ifdef WLAN_DEBUG
 	wmi_log_history(block, data, WMI_EVT_HIST);
 	wmi_log_history(block, data, WMI_CMD_HIST);
+#endif
 
 	return NOTIFY_OK;
 }
