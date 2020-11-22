@@ -1494,7 +1494,7 @@ uint8_t qdf_get_rate_limit_by_type(uint8_t type)
  *
  * Return: String based on pkt type
  */
-static
+static __maybe_unused
 uint8_t *qdf_get_pkt_type_string(uint8_t type, uint8_t subtype)
 {
 	switch (subtype) {
@@ -1552,7 +1552,7 @@ uint8_t *qdf_get_pkt_type_string(uint8_t type, uint8_t subtype)
  *
  * Return: String based on pkt status
  */
-static
+static __maybe_unused
 uint8_t *qdf_get_pkt_status_string(uint8_t status)
 {
 	switch (status) {
