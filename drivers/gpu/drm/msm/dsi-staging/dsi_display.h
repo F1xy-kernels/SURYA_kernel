@@ -284,7 +284,7 @@ struct dsi_display {
 	u32 te_source;
 };
 
-static struct dsi_display *whitep_display;
+static __maybe_unused struct dsi_display *whitep_display;
 
 //Update /proc/tp_info & /proc/tp_lockdown_info node
 extern void update_lct_tp_info(char *tp_info_buf, char *tp_lockdown_info_buf);
