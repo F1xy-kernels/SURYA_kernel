@@ -156,7 +156,7 @@ void dfs_radar_enable(struct wlan_dfs *dfs, int no_cac, uint32_t opmode)
 				 WLAN_IS_CHAN_DFS_CFREQ2(dfs->dfs_curchan))) ||
 		(dfs_is_precac_timer_running(dfs))) {
 		struct dfs_state *rs_pri = NULL, *rs_ext = NULL;
-		uint8_t index_pri, index_ext;
+		uint8_t index_pri, index_ext = 0;
 
 		dfs->dfs_proc_phyerr |= DFS_AR_EN;
 		dfs->dfs_proc_phyerr |= DFS_RADAR_EN;
