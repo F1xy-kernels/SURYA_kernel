@@ -934,7 +934,7 @@ static int ce_ring_setup(struct hif_softc *scn, uint8_t ring_type,
 
 int hif_ce_bus_early_suspend(struct hif_softc *scn)
 {
-	uint8_t ul_pipe, dl_pipe;
+	uint8_t ul_pipe = 0, dl_pipe = 0;
 	int ce_id, status, ul_is_polled, dl_is_polled;
 	struct CE_state *ce_state;
 
@@ -3596,7 +3596,7 @@ void hif_wlan_disable(struct hif_softc *scn)
 int hif_get_wake_ce_id(struct hif_softc *scn, uint8_t *ce_id)
 {
 	QDF_STATUS status;
-	uint8_t ul_pipe, dl_pipe;
+	uint8_t ul_pipe, dl_pipe = 0;
 	int ul_is_polled, dl_is_polled;
 
 	/* DL pipe for HTC_CTRL_RSVD_SVC should map to the wake CE */
