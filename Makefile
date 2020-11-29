@@ -801,7 +801,7 @@ endif
 
 # Initialize all stack variables with a pattern, if desired.
 ifdef CONFIG_INIT_STACK_ALL
-KBUILD_CFLAGS	+= -ftrivial-auto-var-init=pattern
+KBUILD_CFLAGS	+= $(call cc-option, -ftrivial-auto-var-init=pattern)
 endif
 
 # Workaround for GCC versions < 5.0
