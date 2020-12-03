@@ -21662,6 +21662,7 @@ static int wlan_hdd_cfg80211_connect(struct wiphy *wiphy,
 	return ret;
 }
 
+#ifdef WLAN_DEBUG
 /**
  * hdd_ieee80211_reason_code_to_str() - return string conversion of reason code
  * @reason: ieee80211 reason code.
@@ -21673,7 +21674,6 @@ static int wlan_hdd_cfg80211_connect(struct wiphy *wiphy,
  */
 static const char *hdd_ieee80211_reason_code_to_str(uint16_t reason)
 {
-#ifdef WLAN_DEBUG
 	switch (reason) {
 	CASE_RETURN_STRING(WLAN_REASON_UNSPECIFIED);
 	CASE_RETURN_STRING(WLAN_REASON_PREV_AUTH_NOT_VALID);
@@ -21725,9 +21725,9 @@ static const char *hdd_ieee80211_reason_code_to_str(uint16_t reason)
 	default:
 		return "Unknown";
 	}
-#endif
 	return "";
 }
+#endif
 
 /**
  * hdd_qca_reason_to_str() - return string conversion of qca reason code
