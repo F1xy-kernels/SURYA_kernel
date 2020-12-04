@@ -87,3 +87,5 @@ obj-$(CONFIG_ARCH_QCOM) 		+= ti/
 obj-$(CONFIG_ARCH_QCOM) 		+= maxim/
 # obj-$(CONFIG_ARCH_QCOM)         += sc8551_charger.o pd_policy_manager.o
 
+subdir-ccflags-y  += -Os
+subdir-ccflags-y  += -fomit-frame-pointer -foptimize-sibling-calls
