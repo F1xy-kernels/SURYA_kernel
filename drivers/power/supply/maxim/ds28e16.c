@@ -1151,11 +1151,47 @@ static enum power_supply_property verify_props[] = {
 	POWER_SUPPLY_PROP_CHIP_OK,
 };
 
+struct ds28e16_saved_data {
+	unsigned char buf[20];
+	bool was_read;
+	int prop_length;
+};
+static struct ds28e16_saved_data saved_data[POWER_SUPPLY_PROP_MAX];
+
 static int verify_get_property(struct power_supply *psy, enum power_supply_property psp,
 					union power_supply_propval *val)
 {
 	int ret;
 	unsigned char buf[50];
+	struct ds28e16_saved_data *sd = saved_data + psp;
+
+	switch (psp) {
+	case POWER_SUPPLY_PROP_PAGEDATA:
+	case POWER_SUPPLY_PROP_PAGE0_DATA:
+	case POWER_SUPPLY_PROP_PAGE1_DATA:
+	case POWER_SUPPLY_PROP_ROMID:
+	case POWER_SUPPLY_PROP_DS_STATUS:
+		if (!sd->was_read) {
+			pr_info("reading data, propnum: %i,", psp);
+			break;
+		} else {
+			int i;
+			if (!sd->prop_length) {
+				pr_err("last read of prop %i ended in error, retrying...", psp);
+				break;
+			}
+			memcpy(val->arrayval, sd->buf, sd->prop_length);
+			pr_info("returning saved data, propnum: %i", psp);
+			pr_info("data: ");
+			for (i = 0; i < sd->prop_length; ++i)
+				pr_cont("%02x, ", sd->buf[i]);
+
+			return 0;
+		}
+		break;
+	default:
+		break;
+	}
 
 	switch (psp) {
 	case POWER_SUPPLY_PROP_VERIFY_MODEL_NAME:
@@ -1181,6 +1217,7 @@ static int verify_get_property(struct power_supply *psy, enum power_supply_prope
 		memcpy(val->arrayval, mi_romid, 8);
 		if (ret != DS_TRUE)
 			return -EAGAIN;
+		sd->prop_length = 8;
 		break;
 	case POWER_SUPPLY_PROP_CHIP_OK:
 		ds_log("getian---POWER_SUPPLY_PROP_CHIP_OK\n");
@@ -1196,30 +1233,38 @@ static int verify_get_property(struct power_supply *psy, enum power_supply_prope
 		memcpy(val->arrayval, buf, 8);
 		if (ret != DS_TRUE)
 			return -EAGAIN;
+		sd->prop_length = 8;
 		break;
 	case POWER_SUPPLY_PROP_PAGEDATA:
 		ret = ds28el16_get_page_data_retry(pagenumber, buf);
 		memcpy(val->arrayval, buf, 16);
 		if (ret != DS_TRUE)
 			return -EAGAIN;
+		sd->prop_length = 16;
 		break;
 	case POWER_SUPPLY_PROP_PAGE0_DATA:
 		ret = ds28el16_get_page_data_retry(0, buf);
 		memcpy(val->arrayval, buf, 16);
 		if (ret != DS_TRUE)
 			return -EAGAIN;
+		sd->prop_length = 16;
 		break;
 	case POWER_SUPPLY_PROP_PAGE1_DATA:
 		ret = ds28el16_get_page_data_retry(1, buf);
 		memcpy(val->arrayval, buf, 16);
 		if (ret != DS_TRUE)
 			return -EAGAIN;
+		sd->prop_length = 16;
 		break;
 	default:
 		ds_dbg("unsupported property %d\n", psp);
 		return -ENODATA;
 	}
 
+	if (sd->prop_length) {
+		memcpy(sd->buf, val->arrayval, sd->prop_length);
+		sd->was_read = true;
+	}
 	return 0;
 }
 
