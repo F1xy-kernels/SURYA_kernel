@@ -5367,8 +5367,8 @@ int hdd_set_genie_to_csr(struct hdd_adapter *adapter,
 	struct csr_roam_profile *roam_profile;
 	uint8_t *security_ie;
 	uint32_t status = 0;
-	eCsrEncryptionType RSNEncryptType;
-	eCsrEncryptionType mcRSNEncryptType;
+	eCsrEncryptionType RSNEncryptType = 0;
+	eCsrEncryptionType mcRSNEncryptType = 0;
 	struct hdd_context *hdd_ctx;
 #ifdef WLAN_FEATURE_11W
 	uint8_t RSNMfpRequired = 0;
