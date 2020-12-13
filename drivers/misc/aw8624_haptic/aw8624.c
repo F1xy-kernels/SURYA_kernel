@@ -4275,7 +4275,7 @@ static int __init aw8624_i2c_init(void)
 	return 0;
 }
 
-module_init(aw8624_i2c_init);
+late_initcall(aw8624_i2c_init);
 
 static void __exit aw8624_i2c_exit(void)
 {
