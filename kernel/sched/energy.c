@@ -89,8 +89,7 @@ void init_sched_energy_costs(void)
 			return;
 		}
 		/* Check if the energy model contains frequency/power values */
-		//if (of_find_property(cn, "freq-energy-model", NULL))
-		/* It does */
+		if (of_find_property(cn, "freq-energy-model", NULL))
 			freq_energy_model = true;
 
 		for_each_possible_sd_level(sd_level) {
