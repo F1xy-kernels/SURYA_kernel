@@ -19,8 +19,12 @@ ccflags-y := -shared -fno-common -fno-builtin -fno-stack-protector
 ccflags-y += -DDISABLE_BRANCH_PROFILING -ffixed-x18
 ccflags-y += -nostdlib -Wl,-soname=linux-vdso.so.1 \
 		$(call cc-ldoption, -Wl$(comma)--hash-style=sysv)
-ccflags-y += $(DISABLE_LTO)
 ccflags-y += $(call cc-option, -fno-whole-program)
+
+ifneq ($(CONFIG_LTO_CLANG),)
+ccflags-y	+= $(DISABLE_LTO)
+KBUILD_CFLAGS	+= $(DISABLE_LTO)
+endif
 
 CFLAGS_REMOVE_vgettimeofday.o += $(CC_FLAGS_SCS)
 
