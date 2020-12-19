@@ -29,6 +29,9 @@
 		qcom,mdss-dsi-lane-1-state;
 		qcom,mdss-dsi-lane-2-state;
 		qcom,mdss-dsi-lane-3-state;
+		qcom,esd-err-int-gpio = <&tlmm 4 0>;
+		qcom,mdss-dsi-t-clk-post = <0x04>;
+		qcom,mdss-dsi-t-clk-pre = <0x26>;
 		qcom,mdss-brightness-max-level = <4095>;
 		qcom,mdss-dsi-dma-trigger = "trigger_sw";
 		qcom,mdss-dsi-mdp-trigger = "none";
@@ -291,6 +294,10 @@
 				qcom,mdss-dsc-bit-per-component = <8>;
 				qcom,mdss-dsc-bit-per-pixel = <8>;
 				qcom,mdss-dsc-block-prediction-enable;
+				qcom,mdss-dsi-panel-phy-timings =[00 11 04 04 1E 1E 04
+					04 02 02 04 00];
+				qcom,display-topology = <1 1 1>;
+				qcom,default-topology-index = <0>;
 			};
 		};
 	};
