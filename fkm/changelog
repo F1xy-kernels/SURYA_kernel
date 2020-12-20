@@ -1,0 +1,10 @@
+Version 0.07 changelog:
+
+1. Scheduler and devfreq changes to improve battery life.
+2. Also reduced biasing of top-apps towards big cores.
+3. Silenced some logging.
+4. Improved gpu performance slightly.
+5. Memory allocation speed improvements.
+6. Merged 4.14.215
+7. Added back ESD screen protection for better compatibility.
+8. More efficient frequency and energy models.
