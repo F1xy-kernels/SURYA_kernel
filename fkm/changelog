@@ -1,0 +1,7 @@
+Version 0.11 changelog:
+
+1. Opening camera should not lead to crashes anymore.
+2. Rebalanced devfreq boost frequencies, battery life should improve.
+3. Reduced input latency slightly.
+4. Improved memory allocation speed.
+5. Fix a few camera reltaed memory leaks.
