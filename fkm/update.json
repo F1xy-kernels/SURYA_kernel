@@ -1,0 +1,13 @@
+{
+  "kernel": {
+    "name": "F1xy-Surya",
+    "version": "0.09",
+    "link": "https://github.com/F1xy-kernels/SURYA_Kernel/releases/download/v0.09/F1xy-Surya-0.09.zip",
+    "changelog_url": "https://raw.githubusercontent.com/F1xy-kernels/SURYA_kernel/Q-surya/fkm/changelog",
+    "date": "2021-02-17",
+    "sha1": "d0d6a0d984c8785a3bd7d36210c3cb1a45ac6f75"
+  },
+  "support": {
+    "link": "https://t.me/f1xy_pocox3"
+  }
+}

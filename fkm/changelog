@@ -1,0 +1,9 @@
+Version 0.09 changelog:
+
+1. Removed MSM-thermal-simple.
+2. UFS stability improvements. Hopefully blackscreens will be gone now.
+3. Improved memory and caching management.
+4. Improved scheduler.
+5. Merged 4.14.221.
+6. Silenced some kernel log spam.
+7. Enabled CONFIG_JOYSTICK_XPAD.
