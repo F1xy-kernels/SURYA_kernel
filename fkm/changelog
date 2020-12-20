@@ -1,0 +1,6 @@
+Version 0.10 changelog:
+
+1. Improved stability (no more blackscreens and sofr reboots when opening camera(hopefully)).
+2. Fixed bootloop at Poco logo.
+3. A few scheduler improvements.
+4. Improved power consumption by optimizing UFS cpuidle usage.
