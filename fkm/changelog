@@ -1,0 +1,9 @@
+Version 0.12 changelog:
+
+1. Disabled embedded dtbo.
+2. Switched back to full frequency tables. Fixed energy model.
+3. Added back CPU input boost.
+4. Fixed thermal throttling.
+5. Improved memory management.
+6. Improved performance in games that use Unity engine.
+7. Some misc imrovements.
