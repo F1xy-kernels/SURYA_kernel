@@ -1,0 +1,10 @@
+Version 0.13 changelog:
+
+1. Enabled back embedded dtbo.
+2. Relaxed SLMK settings a little bit.
+3. Fixed app crashes.
+
+Version 0.13-1 changelog:
+
+1. Reverted a WIP commit that still causes numerous issues with different apps.
+
