@@ -1,0 +1,9 @@
+Version 0.08 changelog:
+
+1. MSM-thermal-simple thermal throttling driver.
+2. UFS stability improvements.
+3. A bunch of latency improvements from Sultan.
+4. Improved scheduler.
+5. Merged 4.14.220.
+6. mmap/mremap backports from mainline.
+7. Disabled a few useless userspace daemons.
