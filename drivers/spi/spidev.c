@@ -102,7 +102,6 @@ spidev_sync(struct spidev_data *spidev, struct spi_message *message)
 	int status;
 	struct spi_device *spi;
 
-	printk("%s  %d\n",__FUNCTION__,__LINE__);
 	spin_lock_irq(&spidev->spi_lock);
 	spi = spidev->spi;
 	spin_unlock_irq(&spidev->spi_lock);
@@ -130,7 +129,6 @@ spidev_sync_write(struct spidev_data *spidev, size_t len)
 		};
 	struct spi_message	m;
 
-	printk("%s  %d\n",__FUNCTION__,__LINE__);
 	spi_message_init(&m);
 	spi_message_add_tail(&t, &m);
 	return spidev_sync(spidev, &m);
@@ -146,7 +144,6 @@ spidev_sync_read(struct spidev_data *spidev, size_t len)
 		};
 	struct spi_message	m;
 
-	printk("%s  %d\n",__FUNCTION__,__LINE__);
 	spi_message_init(&m);
 	spi_message_add_tail(&t, &m);
 	return spidev_sync(spidev, &m);
@@ -161,7 +158,6 @@ spidev_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
 	struct spidev_data	*spidev;
 	ssize_t			status = 0;
 
-	printk("%s  %d\n",__FUNCTION__,__LINE__);
 	/* chipselect only toggles at start or end of operation */
 	if (count > bufsiz)
 		return -EMSGSIZE;
@@ -260,7 +256,6 @@ static int spidev_message(struct spidev_data *spidev,
 	u8			*tx_buf, *rx_buf;
 	int			status = -EFAULT;
 
-	printk("%s  %d\n",__FUNCTION__,__LINE__);
 	spi_message_init(&msg);
 	k_xfers = kcalloc(n_xfers, sizeof(*k_tmp), GFP_KERNEL);
 	if (k_xfers == NULL)
@@ -428,7 +423,6 @@ spidev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	unsigned		n_ioc;
 	struct spi_ioc_transfer	*ioc;
 
-	printk("%s  %d\n",__FUNCTION__,__LINE__);
 	/* Check type and command number */
 	if (_IOC_TYPE(cmd) != SPI_IOC_MAGIC)
 		return -ENOTTY;
@@ -815,7 +809,6 @@ static int spidev_probe(struct spi_device *spi)
 	int			status;
 	unsigned long		minor;
 
-	printk("%s  %d\n",__FUNCTION__,__LINE__);
 	/*
 	 * spidev should never be referenced in DT without a specific
 	 * compatible string, it is a Linux implementation thing
@@ -915,7 +908,6 @@ static int __init spidev_init(void)
 {
 	int status;
 
-	printk("%s  %d\n",__FUNCTION__,__LINE__);
 	/* Claim our 256 reserved device numbers.  Then register a class
 	 * that will key udev/mdev to add/remove /dev nodes.  Last, register
 	 * the driver which manages those device numbers.
