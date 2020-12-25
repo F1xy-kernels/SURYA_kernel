@@ -1,20 +1,11 @@
-Initial FKM and XDA release. This is a combined changelog of versions .01 to .03:
+Version 0.04 changelog:
+1. Fixed IR blaster.
+2. Sped up mmap/mremap operations.
+3. Fixed a few KASAN warnings.
+4. Improved touchscreen IRQ processing.
+5. Imported optimized exfat driver from Arter97.
+6. Hopefully fixed OTG.
+7. Reduced panel's power consumption.
+8. Fixes for UFS driver.
 
-1. Built with GCC using latest CAF sources with slightly cleaned up Xiaomi edits.
-2. Uses efficient CPU frequencies.
-3. Most of my optimisations for K20P:
-- Memory allocation backports
-- Locking backports
-- Undebugging
-- Reduced logging
-- Better task placement
-- Faster interrupts and kthread processing
-- Lots of various optimisations
-4. TTL editing.
-5. Wireguard.
-6. SimpleLMK.
-7. BBR TCP algorithm.
-8. Cpusets from Pixel 5.
-9. A bunch of fixes to screen drivers to reduce lags/jitter.
-10. mmap/mremap, TLB invalidation, mmu_gather backported from mainline for a major performance boost.
-11. Fixed sound crackling from top speaker.
+HEAD at b22951303cfbee66a5ab8401a3f6770886f67534
