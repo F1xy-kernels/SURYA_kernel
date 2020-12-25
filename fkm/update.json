@@ -1,11 +1,11 @@
 {
   "kernel": {
     "name": "F1xy-Surya",
-    "version": "0.03",
-    "link": "https://github.com/F1xy-kernels/SURYA_Kernel/releases/download/v0.03/F1xy-Surya-0.03.zip",
+    "version": "0.04",
+    "link": "https://github.com/F1xy-kernels/SURYA_Kernel/releases/download/v0.04/F1xy-Surya-0.04.zip",
     "changelog_url": "https://raw.githubusercontent.com/F1xy-kernels/SURYA_kernel/Q-surya/fkm/changelog",
-    "date": "2020-12-20",
-    "sha1": "663a4c0473309689220e1c2468b4e2f2527b5d1e"
+    "date": "2020-12-25",
+    "sha1": "215d306d17c8acb0cd59979ef606811022bc864a"
   },
   "support": {
     "link": "https://t.me/f1xy_pocox3"
