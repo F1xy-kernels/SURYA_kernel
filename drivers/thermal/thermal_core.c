@@ -1786,7 +1786,7 @@ static DEVICE_ATTR(board_sensor_temp, 0664,
 static DEVICE_ATTR(cpu_limits, 0664,
 		   cpu_limits_show, cpu_limits_store);
 
-static int create_thermal_message_node(void)
+static noinline int create_thermal_message_node(void)
 {
 	int ret = 0;
 
@@ -1875,25 +1875,6 @@ static int screen_state_for_thermal_callback(struct notifier_block *nb, unsigned
 }
 #endif
 
-
-static int of_parse_thermal_message(void)
-{
-	struct device_node *np;
-
-	np = of_find_node_by_name(NULL, "thermal-message");
-	if (!np)
-		return -EINVAL;
-
-	if (of_property_read_string(np, "board-sensor", &board_sensor))
-		return -EINVAL;
-
-	pr_info("%s board sensor: %s\n", board_sensor);
-
-	printk("board sensor: %s\n", board_sensor);
-
-	return 0;
-}
-
 static int __init thermal_init(void)
 {
 	int result;
@@ -1928,11 +1909,6 @@ static int __init thermal_init(void)
 	result = create_thermal_message_node();
 	if (result)
 		pr_warn("Thermal: create thermal message node failed, return %d\n",
-			result);
-
-	result = of_parse_thermal_message();
-	if (result)
-		pr_warn("Thermal: Can not parse thermal message node, return %d\n",
 			result);
 
 #ifdef CONFIG_DRM
