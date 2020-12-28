@@ -1561,9 +1561,9 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 			/* hope the handler works with current  trigger mode */
 			pr_warn("irq %d uses trigger mode %u; requested %u\n",
 				irq, omsk, nmsk);
-
-		*old_ptr = new;
 	}
+
+	*old_ptr = new;
 
 	irq_pm_install_action(desc, new);
 
