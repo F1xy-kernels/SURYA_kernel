@@ -1,11 +1,6 @@
-Version 0.04 changelog:
-1. Fixed IR blaster.
-2. Sped up mmap/mremap operations.
-3. Fixed a few KASAN warnings.
-4. Improved touchscreen IRQ processing.
-5. Imported optimized exfat driver from Arter97.
-6. Hopefully fixed OTG.
-7. Reduced panel's power consumption.
-8. Fixes for UFS driver.
+Version 0.05 changelog:
+1. Fixed OTG
+2. Improved ION performance.
+3. Faster touchscreen processing.
 
-HEAD at b22951303cfbee66a5ab8401a3f6770886f67534
+HEAD at 3fef0dbaa49f7e7375c6c537fd832af3c25074f2
