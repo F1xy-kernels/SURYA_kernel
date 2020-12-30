@@ -45,7 +45,6 @@
 #define DEFAULT_PANEL_PREFILL_LINES	25
 #define TICKS_IN_MICRO_SECOND		1000000
 
-extern void lcd_esd_enable(bool on);
 extern char g_lcd_id_mi[64];
 
 static int panel_disp_param_send_lock(struct dsi_panel *panel, int param);
@@ -3267,27 +3266,6 @@ static int dsi_panel_parse_esd_config(struct dsi_panel *panel)
 
 	esd_config = &panel->esd_config;
 	esd_config->status_mode = ESD_MODE_MAX;
-
-	/* esd-err-flag method will be prefered */
-	esd_config->esd_err_irq_gpio = of_get_named_gpio(panel->panel_of_node, "qcom,esd-err-int-gpio", 0);
-	esd_config->esd_err_irq_flags = IRQF_TRIGGER_FALLING | IRQF_ONESHOT;
-
-	if (gpio_is_valid(esd_config->esd_err_irq_gpio)) {
-		pr_info("esd irq gpio is valid\n");
-		esd_config->esd_err_irq = gpio_to_irq(esd_config->esd_err_irq_gpio);
-		rc = gpio_request(esd_config->esd_err_irq_gpio, "esd_err_int_gpio");
-		if (rc)
-			pr_err("%s: Failed to get esd irq GPIO%d (rc = %d)",
-					__func__, esd_config->esd_err_irq_gpio, rc);
-		else {
-			pr_err("%s: Succeed to get esd irq GPIO%d (rc = %d)",
-					__func__, esd_config->esd_err_irq_gpio, rc);
-			gpio_direction_input(esd_config->esd_err_irq_gpio);
-		}
-
-		return 0;
-	}
-
 	esd_config->esd_enabled = utils->read_bool(utils->data,
 		"qcom,esd-check-enabled");
 
@@ -4731,9 +4709,6 @@ int dsi_panel_enable(struct dsi_panel *panel)
 	else
 		panel->panel_initialized = true;
 	mutex_unlock(&panel->panel_lock);
-
-	lcd_esd_enable(1);
-
 	return rc;
 }
 
@@ -4805,8 +4780,6 @@ int dsi_panel_disable(struct dsi_panel *panel)
 			dsi_pwr_panel_regulator_mode_set(&panel->power_info,
 				"ibb", REGULATOR_MODE_STANDBY);
 
-		lcd_esd_enable(0);
-
 		rc = dsi_panel_tx_cmd_set(panel, DSI_CMD_SET_OFF);
 		if (rc) {
 			/*
@@ -4877,21 +4850,21 @@ int dsi_panel_set_feature(struct dsi_panel *panel, enum dsi_cmd_set_type type)
 		int rc = 0;
 
 		if (!panel) {
-			pr_err("Invalid params\n");
-			return -EINVAL;
+				pr_err("Invalid params\n");
+				return -EINVAL;
 		}
 		pr_info("xinj:%s panel_initialized=%d type=%d\n", __func__, panel->panel_initialized, type);
 		if (!panel->panel_initialized) {
-			pr_err("xinj: con't set cmds type=%d\n", type);
-			return -EINVAL;
+				pr_err("xinj: con't set cmds type=%d\n", type);
+				return -EINVAL;
 		}
 
 		mutex_lock(&panel->panel_lock);
 
 		rc = dsi_panel_tx_cmd_set(panel, type);
 		if (rc) {
-			pr_err("[%s] failed to send DSI_CMD_SET_FEATURE_ON/OFF cmds, rc=%d,type=%d\n",
-					panel->name, rc, type);
+				pr_err("[%s] failed to send DSI_CMD_SET_FEATURE_ON/OFF cmds, rc=%d,type=%d\n",
+						panel->name, rc, type);
 		}
 		mutex_unlock(&panel->panel_lock);
 		return rc;
