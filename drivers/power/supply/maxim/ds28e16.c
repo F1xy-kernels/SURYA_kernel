@@ -1918,20 +1918,11 @@ static struct platform_driver ds28e16_driver = {
 	.remove = ds28e16_remove,
 };
 
-static struct work_struct boot_work;
-
-static void ds28e16_init_work(struct work_struct *work)
-{
-	if (platform_driver_register(&ds28e16_driver))
-		ds_log("%s init failed, rip.", __func__);
-}
-
 static int __init ds28e16_init(void)
 {
-	INIT_WORK(&boot_work, ds28e16_init_work);
-	schedule_work(&boot_work);
+	ds_log("%s entry.", __func__);
 
-	return 0;
+	return platform_driver_register(&ds28e16_driver);
 }
 
 static void __exit ds28e16_exit(void)
@@ -1940,7 +1931,7 @@ static void __exit ds28e16_exit(void)
 	platform_driver_unregister(&ds28e16_driver);
 }
 
-device_initcall(ds28e16_init);
+module_init(ds28e16_init);
 module_exit(ds28e16_exit);
 
 MODULE_AUTHOR("xiaomi Inc.");
