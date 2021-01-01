@@ -36,10 +36,10 @@
 #define OUTPUT_HIGH				(0x1 << 1)
 #define OUTPUT_LOW				0x1
 
-#define ONE_WIRE_CONFIG_OUT		writel(DRV_STRENGTH_16MA | GPIO_OUTPUT | GPIO_PULL_UP, g_onewire_data->gpio_cfg_reg)
-#define ONE_WIRE_CONFIG_IN		writel(DRV_STRENGTH_16MA | GPIO_INPUT | GPIO_PULL_UP, g_onewire_data->gpio_cfg_reg)
-#define ONE_WIRE_OUT_HIGH		writel(OUTPUT_HIGH, g_onewire_data->gpio_in_out_reg)
-#define ONE_WIRE_OUT_LOW		writel(OUTPUT_LOW, g_onewire_data->gpio_in_out_reg)
+#define ONE_WIRE_CONFIG_OUT		writel_relaxed(DRV_STRENGTH_16MA | GPIO_OUTPUT | GPIO_PULL_UP, g_onewire_data->gpio_cfg_reg)// OUT
+#define ONE_WIRE_CONFIG_IN		writel_relaxed(DRV_STRENGTH_16MA | GPIO_INPUT | GPIO_PULL_UP, g_onewire_data->gpio_cfg_reg)// IN
+#define ONE_WIRE_OUT_HIGH		writel_relaxed(OUTPUT_HIGH, g_onewire_data->gpio_in_out_reg)// OUT: 1
+#define ONE_WIRE_OUT_LOW		writel_relaxed(OUTPUT_LOW, g_onewire_data->gpio_in_out_reg)// OUT: 0
 
 struct onewire_gpio_data {
 	struct platform_device *pdev;
@@ -51,6 +51,8 @@ struct onewire_gpio_data {
 	struct gpio_chip *ow_gpio_chip;
 	void *gpio_in_out_reg;
 	void *gpio_cfg_reg;
+
+	raw_spinlock_t lock;
 
 	struct pinctrl *ow_gpio_pinctrl;
 	struct pinctrl_state *pinctrl_state_active;
@@ -72,27 +74,33 @@ static int onewire_major;
 static int onewire_gpio_detected;
 static struct onewire_gpio_data *g_onewire_data;
 
-inline void Delay_us(unsigned int T)
+void Delay_us(unsigned int T)
 {
-	if (T < 10)
-		udelay(T);
-	else
-		usleep_range(T, T + T / 2);
+	udelay(T);
 }
 EXPORT_SYMBOL(Delay_us);
+
+void Delay_ns(unsigned int T)
+{
+	ndelay(T);
+}
+EXPORT_SYMBOL(Delay_ns);
 
 unsigned char ow_reset(void)
 {
 	unsigned char presence = 0xFF;
+	unsigned long flags;
 
+	raw_spin_lock_irqsave(&g_onewire_data->lock, flags);
 	ONE_WIRE_CONFIG_OUT;
 	ONE_WIRE_OUT_LOW;
 	Delay_us(50);// 48
 	ONE_WIRE_OUT_HIGH;
 	ONE_WIRE_CONFIG_IN;
 	Delay_us(7);
-	presence = (unsigned char)readl(g_onewire_data->gpio_in_out_reg) & 0x01; // Read
+	presence = (unsigned char)readl_relaxed(g_onewire_data->gpio_in_out_reg) & 0x01; // Read
 	Delay_us(50);
+	raw_spin_unlock_irqrestore(&g_onewire_data->lock, flags);
 
 	return presence;
 }
@@ -104,9 +112,16 @@ unsigned char read_bit(void)
 
 	ONE_WIRE_CONFIG_OUT;
 	ONE_WIRE_OUT_LOW;
+	//Delay_us(1);////
+	//Delay_ns(400);
 	ONE_WIRE_CONFIG_IN;
-	vamm = readl(g_onewire_data->gpio_in_out_reg); // Read
+	//Delay_ns(500);//
+	vamm = readl_relaxed(g_onewire_data->gpio_in_out_reg); // Read
 	Delay_us(15);
+	//ONE_WIRE_OUT_HIGH;
+	//ONE_WIRE_CONFIG_OUT;
+        //ONE_WIRE_OUT_HIGH;
+	//Delay_us(6);
 	return((unsigned char)vamm & 0x01);
 }
 
@@ -126,12 +141,15 @@ unsigned char read_byte(void)
 {
 	unsigned char i;
 	unsigned char value = 0;
+	unsigned long flags;
 
+	raw_spin_lock_irqsave(&g_onewire_data->lock, flags);
 	for (i = 0; i < 8; i++) {
 		if (read_bit())
 			value |= 0x01 << i;// reads byte in, one byte at a time and then shifts it left
 	}
 
+	raw_spin_unlock_irqrestore(&g_onewire_data->lock, flags);
 	return value;
 }
 EXPORT_SYMBOL(read_byte);
@@ -140,7 +158,9 @@ void write_byte(char val)
 {
 	unsigned char i;
 	unsigned char temp;
+	unsigned long flags;
 
+	raw_spin_lock_irqsave(&g_onewire_data->lock, flags);
 	ONE_WIRE_CONFIG_OUT;
 	// writes byte, one bit at a time
 	for (i = 0; i < 8; i++) {
@@ -148,6 +168,7 @@ void write_byte(char val)
 		temp &= 0x01; // copy that bit to temp
 		write_bit(temp); // write bit in temp into
 	}
+	raw_spin_unlock_irqrestore(&g_onewire_data->lock, flags);
 }
 EXPORT_SYMBOL(write_byte);
 
@@ -401,6 +422,8 @@ static int onewire_gpio_probe(struct platform_device *pdev)
 	g_onewire_data = onewire_data;
 	onewire_data->pdev = pdev;
 	platform_set_drvdata(pdev, onewire_data);
+
+	raw_spin_lock_init(&g_onewire_data->lock);
 
 	// pinctrl init
 	retval = onewire_gpio_pinctrl_init(onewire_data);
