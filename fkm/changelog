@@ -1,11 +1,18 @@
-Version 0.04 changelog:
-1. Fixed IR blaster.
-2. Sped up mmap/mremap operations.
-3. Fixed a few KASAN warnings.
-4. Improved touchscreen IRQ processing.
-5. Imported optimized exfat driver from Arter97.
-6. Hopefully fixed OTG.
-7. Reduced panel's power consumption.
-8. Fixes for UFS driver.
+Version 0.06 changelog:
 
-HEAD at b22951303cfbee66a5ab8401a3f6770886f67534
+1. Fixed WPA3 wifi authorization.
+2. Fixed tweaker blocker.
+3. Merged 4.14.213 and latest CAF updates.
+4. Bumped up scheduler HZ value to 300, device should feel a little faster.
+5. Many changes to reduce power drain.
+	- A bunch of IRQs removed from perf critical list.
+	- Disabled cpufreq boosting completely.
+	- Slightly different preset of freqs.
+	- Reduced pm_qos abuse.
+6. Rebalanced cpusets.
+7. Enabled devfreq boost for smoother experience.
+8. Enabled packet injection.
+9. KCAL.
+10. Compiled with GCC LTO.
+
+HEAD at 85efa48da3ad9616023c951dcab70fb4e0d4aaa7
