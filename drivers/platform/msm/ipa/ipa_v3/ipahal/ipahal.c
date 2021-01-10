@@ -49,6 +49,8 @@ static const char *ipahal_pkt_status_exception_to_str
 	__stringify(IPAHAL_PKT_STATUS_EXCEPTION_SW_FILT),
 	__stringify(IPAHAL_PKT_STATUS_EXCEPTION_NAT),
 	__stringify(IPAHAL_PKT_STATUS_EXCEPTION_IPV6CT),
+	__stringify(IPAHAL_PKT_STATUS_EXCEPTION_UCP),
+	__stringify(IPAHAL_PKT_STATUS_EXCEPTION_CSUM),
 };
 
 static u16 ipahal_imm_cmd_get_opcode(enum ipahal_imm_cmd_name cmd);
@@ -978,6 +980,9 @@ static void ipa_pkt_status_parse(
 		else
 			exception_type = IPAHAL_PKT_STATUS_EXCEPTION_NAT;
 		break;
+	case 128:
+		exception_type = IPAHAL_PKT_STATUS_EXCEPTION_UCP;
+		break;
 	case 229:
 		exception_type = IPAHAL_PKT_STATUS_EXCEPTION_CSUM;
 		break;
@@ -1319,7 +1324,7 @@ static int ipahal_cp_proc_ctx_to_hw_buff_v3(enum ipa_hdr_proc_type type,
 		ctx->hdr_add.tlv.type = IPA_PROC_CTX_TLV_TYPE_HDR_ADD;
 		ctx->hdr_add.tlv.length = 2;
 		ctx->hdr_add.tlv.value = hdr_len;
-		ctx->hdr_add.hdr_addr = is_hdr_proc_ctx ? phys_base :
+		hdr_addr = is_hdr_proc_ctx ? phys_base :
 			hdr_base_addr + offset_entry->offset;
 		IPAHAL_DBG("header address 0x%x\n",
 			ctx->hdr_add.hdr_addr);
