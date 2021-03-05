@@ -99,6 +99,16 @@ static int try_to_freeze_tasks(bool user_only)
 		pr_cont("\n");
 		pr_err("Freezing of tasks aborted after %d.%03d seconds",
 		       elapsed_msecs / 1000, elapsed_msecs % 1000);
+
+		if ((elapsed_msecs / 1000) > 4) {
+			read_lock(&tasklist_lock);
+			for_each_process_thread(g, p) {
+				if (p != current && !freezer_should_skip(p)
+				    && freezing(p) && !frozen(p))
+					sched_show_task(p);
+			}
+			read_unlock(&tasklist_lock);
+		}
 	} else if (todo) {
 		pr_cont("\n");
 		pr_err("Freezing of tasks failed after %d.%03d seconds"
