@@ -439,15 +439,13 @@ static void request_wait_answer(struct fuse_conn *fc, struct fuse_req *req)
 {
 	struct fuse_iqueue *fiq = &fc->iq;
 	int err;
-	long timeout = msecs_to_jiffies(freeze_timeout_msecs / 2);
 
 	if (!fc->no_interrupt) {
 		/* Any signal may interrupt this */
-		err = wait_event_interruptible_timeout(req->waitq,
-					test_bit(FR_FINISHED, &req->flags), timeout);
-		if (err > 0)
+		err = wait_event_interruptible(req->waitq,
+					test_bit(FR_FINISHED, &req->flags));
+		if (!err)
 			return;
-		pr_err("%s: failed at %i\n", __func__, __LINE__);
 
 		set_bit(FR_INTERRUPTED, &req->flags);
 		/* matches barrier in fuse_dev_do_read() */
@@ -458,11 +456,10 @@ static void request_wait_answer(struct fuse_conn *fc, struct fuse_req *req)
 
 	if (!test_bit(FR_FORCE, &req->flags)) {
 		/* Only fatal signals may interrupt this */
-		err = wait_event_killable_timeout(req->waitq,
-					test_bit(FR_FINISHED, &req->flags),  timeout);
-		if (err > 0)
+		err = wait_event_killable(req->waitq,
+					test_bit(FR_FINISHED, &req->flags));
+		if (!err)
 			return;
-		pr_err("%s: failed at %i\n", __func__, __LINE__);
 
 		spin_lock(&fiq->waitq.lock);
 		/* Request is not yet in userspace, bail out */
@@ -481,10 +478,8 @@ static void request_wait_answer(struct fuse_conn *fc, struct fuse_req *req)
 	 * Wait it out.
 	 */
 	while (!test_bit(FR_FINISHED, &req->flags))
-		err = wait_event_freezable_timeout(req->waitq,
-				test_bit(FR_FINISHED, &req->flags), timeout);
-	if (err > 0)
-		pr_err("%s: failed at %i\n", __func__, __LINE__);
+		wait_event_freezable(req->waitq,
+				test_bit(FR_FINISHED, &req->flags));
 }
 
 static void __fuse_request_send(struct fuse_conn *fc, struct fuse_req *req)
